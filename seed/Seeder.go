@@ -1,8 +1,8 @@
 package seed
 
 import (
+	"gorm-gin/config"
 	"gorm-gin/models"
-	"gorm.io/gorm"
 	"log"
 )
 
@@ -25,17 +25,17 @@ var books = []models.Book{
 	},
 }
 
-func Load(db *gorm.DB) {
-	err := db.Migrator().DropTable(&models.User{}, models.Book{})
+func Load() {
+	err := config.DB.Migrator().DropTable(&models.User{}, models.Book{})
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
-	err = db.Debug().AutoMigrate(&models.User{}, &models.Book{})
+	err = config.DB.Debug().AutoMigrate(&models.User{}, &models.Book{})
 	if err != nil {
 		log.Fatalf("cannot migrate table: %v", err)
 	}
 	for i, _ := range books {
-		err = db.Debug().Model(&models.Book{}).Create(&books[i]).Error
+		err = config.DB.Debug().Model(&models.Book{}).Create(&books[i]).Error
 		if err != nil {
 			log.Fatalf("cannot seed books table: %v", err)
 		}
