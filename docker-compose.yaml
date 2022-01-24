@@ -9,3 +9,11 @@ services:
       target: development
     ports:
       - "8080:8080"
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_USER: admin
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_PASSWORD: password
+      MARIADB_DATABASE: boilerplate

@@ -7,7 +7,7 @@ import (
 	_ "gorm-gin/docs"
 )
 
-// @title           Swagger Example API
+// @title           Boilerplate Gin and Gorm
 // @version         1.0
 // @description     This is a sample server celler server.
 // @termsOfService  http://swagger.io/terms/
@@ -31,5 +31,8 @@ func main() {
 	defer Config.CloseDB()
 	r := Routers.SetupRouter()
 	Seed.Load(Config.DB)
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		return
+	}
 }
