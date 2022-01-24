@@ -1,8 +1,8 @@
-package ApiHelpers
+package apiHelpers
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm-gin/Config"
+	"gorm-gin/config"
 	"math"
 	"strconv"
 )
@@ -62,7 +62,7 @@ func RespondJSON(w *gin.Context, status int, payload interface{}) {
 func RespondPaginationJSON(w *gin.Context, payload interface{}, pagination *Pagination) {
 	var res ResponseDataWithPagination
 	res.Data = payload
-	Config.DB.Model(payload).Count(&res.TotalRows)
+	config.DB.Model(payload).Count(&res.TotalRows)
 	res.TotalPages = int(math.Ceil(float64(res.TotalRows) / float64(pagination.Limit)))
 	res.Page = pagination.Page
 	res.Limit = pagination.Limit

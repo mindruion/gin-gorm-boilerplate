@@ -1,10 +1,10 @@
 package main
 
 import (
-	"gorm-gin/Config"
-	"gorm-gin/Routers"
-	"gorm-gin/Seed"
+	"gorm-gin/config"
 	_ "gorm-gin/docs"
+	"gorm-gin/routers"
+	"gorm-gin/seed"
 )
 
 // @title           Boilerplate Gin and Gorm
@@ -26,11 +26,11 @@ import (
 //@in header
 //@name Authorization
 func main() {
-	Config.LoadEnv()
-	Config.Init()
-	defer Config.CloseDB()
-	r := Routers.SetupRouter()
-	Seed.Load(Config.DB)
+	config.LoadEnv()
+	config.Init()
+	defer config.CloseDB()
+	r := routers.SetupRouter()
+	seed.Load(config.DB)
 	err := r.Run(":8080")
 	if err != nil {
 		return

@@ -1,10 +1,10 @@
-package Controllers
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm-gin/ApiHelpers"
-	"gorm-gin/Middlewares"
-	_ "gorm-gin/Models"
+	"gorm-gin/apiHelpers"
+	"gorm-gin/middlewares"
+	_ "gorm-gin/models"
 	"net/http"
 )
 
@@ -14,7 +14,7 @@ import (
 // @Tags Auth
 // @Accept */*
 // @Book json
-// @Param        message  body      Models.Login  true  "Login"
+// @Param        message  body      models.Login  true  "Login"
 // @Router /login [post]
 func Login(c *gin.Context) {
 	return
@@ -28,8 +28,8 @@ func Login(c *gin.Context) {
 // @Book json
 // @Router /me [get]
 // @Security ApiKeyAuth
-// @Success 200 {object} Models.User
+// @Success 200 {object} models.User
 func Me(c *gin.Context) {
-	currentUser := Middlewares.GetLoggedUser(c)
-	ApiHelpers.RespondJSON(c, http.StatusOK, currentUser)
+	currentUser := middlewares.GetLoggedUser(c)
+	apiHelpers.RespondJSON(c, http.StatusOK, currentUser)
 }

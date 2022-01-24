@@ -67,7 +67,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Models.Book"
+                                "$ref": "#/definitions/models.Book"
                             }
                         }
                     }
@@ -94,7 +94,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Models.Book"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 ],
@@ -102,7 +102,7 @@ var doc = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/Models.Book"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 }
@@ -136,7 +136,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Models.Book"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 }
@@ -162,7 +162,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Models.Book"
+                            "$ref": "#/definitions/models.Book"
                         }
                     },
                     {
@@ -177,7 +177,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Models.Book"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 }
@@ -229,7 +229,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Models.Login"
+                            "$ref": "#/definitions/models.Login"
                         }
                     }
                 ],
@@ -255,7 +255,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Models.User"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 }
@@ -263,7 +263,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "Models.Book": {
+        "models.Book": {
             "type": "object",
             "required": [
                 "name"
@@ -289,7 +289,7 @@ var doc = `{
                 }
             }
         },
-        "Models.Login": {
+        "models.Login": {
             "type": "object",
             "required": [
                 "email",
@@ -304,7 +304,7 @@ var doc = `{
                 }
             }
         },
-        "Models.User": {
+        "models.User": {
             "type": "object",
             "properties": {
                 "created_at": {

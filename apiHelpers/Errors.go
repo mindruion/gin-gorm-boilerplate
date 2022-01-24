@@ -1,4 +1,4 @@
-package ApiHelpers
+package apiHelpers
 
 import (
 	"errors"

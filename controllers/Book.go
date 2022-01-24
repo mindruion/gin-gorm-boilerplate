@@ -1,10 +1,10 @@
-package Controllers
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm-gin/ApiHelpers"
-	"gorm-gin/Middlewares"
-	"gorm-gin/Models"
+	"gorm-gin/apiHelpers"
+	"gorm-gin/middlewares"
+	"gorm-gin/models"
 	"net/http"
 )
 
@@ -16,18 +16,18 @@ import (
 // @Book json
 // @Param limit    query      int     false  "Limit"
 // @Param page  query      int     false  "Page"
-// @Success 200 {array} Models.Book
+// @Success 200 {array} models.Book
 // @Router /books [get]
 // @Security ApiKeyAuth
 func ListBook(c *gin.Context) {
-	var book []Models.Book
-	currentUser := Middlewares.GetLoggedUser(c)
-	pagination := ApiHelpers.GeneratePaginationFromRequest(c)
-	err := Models.GetAllBook(&book, &pagination, currentUser)
+	var book []models.Book
+	currentUser := middlewares.GetLoggedUser(c)
+	pagination := apiHelpers.GeneratePaginationFromRequest(c)
+	err := models.GetAllBook(&book, &pagination, currentUser)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	} else {
-		ApiHelpers.RespondPaginationJSON(c, book, &pagination)
+		apiHelpers.RespondPaginationJSON(c, book, &pagination)
 	}
 }
 
@@ -37,23 +37,23 @@ func ListBook(c *gin.Context) {
 // @Tags Book
 // @Accept */*
 // @Book json
-// @Param        message  body      Models.Book  true  "Account Info"
-// @Success 201 {object} Models.Book
+// @Param        message  body      models.Book  true  "Account Info"
+// @Success 201 {object} models.Book
 // @Router /books [post]
 // @Security ApiKeyAuth
 func AddNewBook(c *gin.Context) {
-	var book Models.Book
+	var book models.Book
 	if err := c.ShouldBindJSON(&book); err != nil {
-		ApiHelpers.HandleError(err, c)
+		apiHelpers.HandleError(err, c)
 		return
 	}
-	currentUser := Middlewares.GetLoggedUser(c)
+	currentUser := middlewares.GetLoggedUser(c)
 	book.Author = *currentUser
-	err := Models.AddNewBook(&book)
+	err := models.AddNewBook(&book)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	} else {
-		ApiHelpers.RespondJSON(c, http.StatusCreated, book)
+		apiHelpers.RespondJSON(c, http.StatusCreated, book)
 	}
 }
 
@@ -64,18 +64,18 @@ func AddNewBook(c *gin.Context) {
 // @Accept */*
 // @Book json
 // @Param        id  path      int  true  "Book id"
-// @Success 200 {object} Models.Book
+// @Success 200 {object} models.Book
 // @Router /books/{id} [get]
 // @Security ApiKeyAuth
 func GetOneBook(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var book Models.Book
-	currentUser := Middlewares.GetLoggedUser(c)
-	err := Models.GetOneBook(&book, id, currentUser)
+	var book models.Book
+	currentUser := middlewares.GetLoggedUser(c)
+	err := models.GetOneBook(&book, id, currentUser)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	} else {
-		ApiHelpers.RespondJSON(c, http.StatusOK, book)
+		apiHelpers.RespondJSON(c, http.StatusOK, book)
 	}
 }
 
@@ -85,28 +85,28 @@ func GetOneBook(c *gin.Context) {
 // @Tags Book
 // @Accept */*
 // @Book json
-// @Param        message  body      Models.Book  true  "Book Info"
+// @Param        message  body      models.Book  true  "Book Info"
 // @Param        id  path      int  true  "Book id"
-// @Success 200 {object} Models.Book
+// @Success 200 {object} models.Book
 // @Router /books/{id} [put]
 // @Security ApiKeyAuth
 func PutOneBook(c *gin.Context) {
-	var book Models.Book
+	var book models.Book
 	id := c.Params.ByName("id")
-	currentUser := Middlewares.GetLoggedUser(c)
-	err := Models.GetOneBook(&book, id, currentUser)
+	currentUser := middlewares.GetLoggedUser(c)
+	err := models.GetOneBook(&book, id, currentUser)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	}
 	if err := c.ShouldBindJSON(&book); err != nil {
-		ApiHelpers.HandleError(err, c)
+		apiHelpers.HandleError(err, c)
 		return
 	}
-	err = Models.PutOneBook(&book, id)
+	err = models.PutOneBook(&book, id)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	} else {
-		ApiHelpers.RespondJSON(c, http.StatusOK, book)
+		apiHelpers.RespondJSON(c, http.StatusOK, book)
 	}
 }
 
@@ -121,13 +121,13 @@ func PutOneBook(c *gin.Context) {
 // @Router /books/{id} [delete]
 // @Security ApiKeyAuth
 func DeleteBook(c *gin.Context) {
-	var book Models.Book
+	var book models.Book
 	id := c.Params.ByName("id")
-	currentUser := Middlewares.GetLoggedUser(c)
-	err := Models.DeleteBook(&book, id, currentUser)
+	currentUser := middlewares.GetLoggedUser(c)
+	err := models.DeleteBook(&book, id, currentUser)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, http.StatusNotFound, book)
+		apiHelpers.RespondJSON(c, http.StatusNotFound, book)
 	} else {
-		ApiHelpers.RespondJSON(c, http.StatusNoContent, book)
+		apiHelpers.RespondJSON(c, http.StatusNoContent, book)
 	}
 }

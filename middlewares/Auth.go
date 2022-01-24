@@ -1,11 +1,11 @@
-package Middlewares
+package middlewares
 
 import (
 	"errors"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	"gorm-gin/Config"
-	"gorm-gin/Models"
+	"gorm-gin/config"
+	"gorm-gin/models"
 	"log"
 	"time"
 )
@@ -13,10 +13,10 @@ import (
 func getJwtMiddleware() *jwt.GinJWTMiddleware {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:           "test zone",
-		Key:             []byte(Config.EnvConfigs["SECRET_KEY"]),
+		Key:             []byte(config.EnvConfigs["SECRET_KEY"]),
 		Timeout:         time.Hour,
 		MaxRefresh:      time.Hour,
-		IdentityKey:     Config.EnvConfigs["IDENTITY_KEY"],
+		IdentityKey:     config.EnvConfigs["IDENTITY_KEY"],
 		PayloadFunc:     handlePayload,
 		IdentityHandler: handleIdentity,
 		Authenticator:   handleAuthentication,
@@ -33,9 +33,9 @@ func getJwtMiddleware() *jwt.GinJWTMiddleware {
 	return authMiddleware
 }
 func handlePayload(data interface{}) jwt.MapClaims {
-	if v, ok := data.(*Models.User); ok {
+	if v, ok := data.(*models.User); ok {
 		return jwt.MapClaims{
-			Config.EnvConfigs["IDENTITY_KEY"]: v.Email,
+			config.EnvConfigs["IDENTITY_KEY"]: v.Email,
 		}
 	}
 	return jwt.MapClaims{}
@@ -49,20 +49,20 @@ func handleUnauthorized(c *gin.Context, code int, message string) {
 
 func handleIdentity(c *gin.Context) interface{} {
 	claims := jwt.ExtractClaims(c)
-	var user Models.User
-	Config.DB.Model(&Models.User{}).First(&user, "email = ?", claims[Config.EnvConfigs["IDENTITY_KEY"]].(string))
+	var user models.User
+	config.DB.Model(&models.User{}).First(&user, "email = ?", claims[config.EnvConfigs["IDENTITY_KEY"]].(string))
 	return &user
 }
 
 func handleAuthentication(c *gin.Context) (interface{}, error) {
-	var loginVals Models.Login
+	var loginVals models.Login
 	if err := c.ShouldBindJSON(&loginVals); err != nil {
 		return "", errors.New("missing Email or Password")
 	}
 	userEmail := loginVals.Email
 	password := loginVals.Password
-	var user Models.User
-	errDB := Config.DB.Model(&Models.User{}).First(&user, "email = ?", userEmail)
+	var user models.User
+	errDB := config.DB.Model(&models.User{}).First(&user, "email = ?", userEmail)
 	if errDB.Error != nil {
 		return nil, jwt.ErrFailedAuthentication
 	}
@@ -74,7 +74,7 @@ func handleAuthentication(c *gin.Context) (interface{}, error) {
 }
 
 func handleAuthorized(data interface{}, c *gin.Context) bool {
-	if _, ok := data.(*Models.User); ok {
+	if _, ok := data.(*models.User); ok {
 		return true
 	}
 
@@ -90,7 +90,7 @@ func InitAuthMiddleware() *jwt.GinJWTMiddleware {
 	return authMiddleware
 }
 
-func GetLoggedUser(c *gin.Context) *Models.User {
-	user, _ := c.Get(Config.EnvConfigs["IDENTITY_KEY"])
-	return user.(*Models.User)
+func GetLoggedUser(c *gin.Context) *models.User {
+	user, _ := c.Get(config.EnvConfigs["IDENTITY_KEY"])
+	return user.(*models.User)
 }
