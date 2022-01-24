@@ -30,7 +30,7 @@ func main() {
 	config.Init()
 	defer config.CloseDB()
 	r := routers.SetupRouter()
-	seed.Load(config.DB)
+	seed.Load()
 	err := r.Run(":8080")
 	if err != nil {
 		return
