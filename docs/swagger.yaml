@@ -1,0 +1,203 @@
+basePath: /v1
+definitions:
+  Models.Book:
+    properties:
+      author:
+        type: string
+      category:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - name
+    type: object
+  Models.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  Models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /books:
+    get:
+      consumes:
+      - '*/*'
+      description: get all books with pagination.
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Models.Book'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Show all books with pagination
+      tags:
+      - Book
+    post:
+      consumes:
+      - '*/*'
+      description: Add a book.
+      parameters:
+      - description: Account Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/Models.Book'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Models.Book'
+      security:
+      - ApiKeyAuth: []
+      summary: Add a book
+      tags:
+      - Book
+  /books/{id}:
+    delete:
+      consumes:
+      - '*/*'
+      description: Delete a book.
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a book
+      tags:
+      - Book
+    get:
+      consumes:
+      - '*/*'
+      description: Get one book by id.
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Models.Book'
+      security:
+      - ApiKeyAuth: []
+      summary: Get one book by id
+      tags:
+      - Book
+    put:
+      consumes:
+      - '*/*'
+      description: Update a book
+      parameters:
+      - description: Book Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/Models.Book'
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Models.Book'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a book
+      tags:
+      - Book
+  /login:
+    post:
+      consumes:
+      - '*/*'
+      description: Get jwt token with credentials
+      parameters:
+      - description: Login
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/Models.Login'
+      responses: {}
+      summary: Login user
+      tags:
+      - Auth
+  /me:
+    get:
+      consumes:
+      - '*/*'
+      description: get info about current logged user.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: get info about current logged user.
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
